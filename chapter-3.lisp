@@ -29,9 +29,7 @@
 (defun uncompress-r (x)
   (if (null x)
       nil
-      (do-uncompress-r nil x)
-      )
-  )
+      (do-uncompress-r nil x)))
 
 (defun do-uncompress-r (res x)
   (if (null x)
@@ -39,32 +37,26 @@
       (let ((head (car x)))
 	(do-uncompress-r
 	    (append res (make-list (car (cdr head)) :initial-element (car head)))
-	  (cdr x))
-	)
-      )
-  )
+	  (cdr x)))))
 
-(defun build-neighbors-table (v)
-  (let ((tbl nil) (scanned nil))
-    ;; (dolist (cycle v)
-    ;;   (dolist (node cycle)
-    ;; 	(if (not (member node scanned))
-    ;; 	    (progn
-    ;; 	      (push node scanned)
-    ;; 	      (setf (assoc node tbl) (cons (assoc node )))
-    ;; 	      )
-    ;; 	    )
-    ;; 	)
-    ;;   )
-    )
-  )
+(defun short-list (lists)
+  (let ((r (first lists)))
+    (dolist (obj (rest lists))
+      (when (> (length r) (length obj))
+	(setf r obj)))
+    r))
 
-(defun build-neighbors-table-for-cycle (c)
-  (let ((tbl nil))
-  (mapcar
-   #'(lambda (n)
-       (cons n (push  (remove n c) (cdr (assoc n tbl) )))
-       )
-   c
-   )
-  ))
+(defun find-min (begin end v)
+  (cond
+    ((member end (assoc begin v)) (list begin end))
+    ((null (assoc begin v)) nil)
+    (t (let ((sp nil))
+	 (setf sp
+	       (short-list
+		(remove nil
+			(mapcar #'(lambda (nei)
+				    (find-min nei end v))
+				(rest (assoc begin v))))))
+	 (if sp (cons begin sp))))))
+
+
