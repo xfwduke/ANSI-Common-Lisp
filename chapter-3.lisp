@@ -59,8 +59,23 @@
 				(rest (assoc begin v))))))
 	 (if sp (cons begin sp))))))
 
+;; 2)
+(defun new-union (list1 list2)
+  (dolist (obj list2 list1)
+    (unless (member obj list1)
+      (setf list1 (append list1 (list obj))))))
 
 ;; 3)
+(defun occurrences-it (lst)
+  (let ((res nil))
+    (dolist (obj lst res)
+      (if (assoc obj res)
+	  (setf (cdr (assoc obj res))
+		(1+ (cdr (assoc obj res))))
+	  (setf res
+		(cons (cons obj 1) res))))
+    res))
+
 (defun occurrences-helper (lst res)
   (cond
     ((null lst) res)
@@ -108,3 +123,4 @@
       (format nil "(~A . ~A)"
 	      (showdots-helper-1 (car lst))
 	      (showdots-helper-1 (cdr lst)))))
+
