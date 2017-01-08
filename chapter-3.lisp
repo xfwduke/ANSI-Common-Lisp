@@ -1,3 +1,6 @@
+(a b (c d) e)
+(defun too (x)
+  )
 ;; compress
 (defun compress (lst)
   (if (null lst)
