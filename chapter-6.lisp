@@ -1,6 +1,12 @@
 (defun philosoph (thing &optional (property 'funny))
   (list thing 'is property))
 
+(defun primo (lst)
+  (car lst))
+
+(defun (setf primo) (val lst)
+  (setf (car lst) val))
+
 ;;; 3)
 (defun count-args (&rest args)
   (length args))
